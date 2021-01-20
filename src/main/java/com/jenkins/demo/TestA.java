@@ -1,0 +1,17 @@
+package com.jenkins.demo;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
+
+/**
+ * @author liuzeyanga
+ * @Date 2021-01-20 18:18
+ */
+@Controller
+public class TestA {
+    @GetMapping("/test")
+    public String get(){
+        return "succ";
+    }
+}
