@@ -1,8 +1,6 @@
 package com.jenkins.demo;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -13,6 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestA {
     @GetMapping("/test")
     public String get(){
-        return "succ";
+        return "succA";
     }
 }
