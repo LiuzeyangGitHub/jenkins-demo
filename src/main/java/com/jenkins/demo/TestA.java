@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestA {
     @GetMapping("/test")
     public String get(){
-        return "succC";
+        return "succD";
     }
 }
