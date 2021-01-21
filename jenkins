@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "启动开始"
 PID=$(ps -ef | grep demo-0.0.1-SNAPSHOT | grep -v grep | awk '{ print $2 }')
 if [ -z "$PID" ]
 then
@@ -9,9 +8,10 @@ else
   kill $PID
 fi
 
+rm -rf /usr/local/test/spring.log
 
-nohup java -jar /usr/local/test/demo-0.0.1-SNAPSHOT.jar --server.port=9999 &
+nohup java -jar /usr/local/test/demo-0.0.1-SNAPSHOT.jar >> /usr/local/test/spring.log --server.port=9999 &
 
-sleep 1
-
-tail -n 800 /usr/local/test/spring.log
+#sleep 10
+#cat /usr/local/test/spring.log
+tail -1f /usr/local/test/spring.log|sed '/Started DemoApplication in/Q'
