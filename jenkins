@@ -8,10 +8,23 @@ else
   kill $PID
 fi
 
-rm -rf /usr/local/test/spring.log
+rm -rf /usr/local/test/deploy.log
 
-nohup java -jar /usr/local/test/demo-0.0.1-SNAPSHOT.jar >> /usr/local/test/spring.log --server.port=9999 &
+nohup java -jar /usr/local/test/demo-0.0.1-SNAPSHOT.jar >> /usr/local/test/deploy.log --server.port=9999 &
 
 #sleep 10
 #cat /usr/local/test/spring.log
-tail -1f /usr/local/test/spring.log|sed '/Started DemoApplication in/Q'
+#tail -1f /usr/local/test/deploy.log|sed '/Started DemoApplication in/Q'
+
+
+tail -f /usr/local/test/deploy.log | while read line
+do
+  is_startup=`echo $line|grep "Started DemoApplication in"|wc -l`
+  echo $line
+  if [ $is_startup -eq 1 ] ;
+   then
+   PID=$(ps -ef | grep 'tail -f /usr/local/test/deploy.log' | grep -v grep | awk '{ print $2 }')
+   kill -9 $PID
+  fi
+done
+
