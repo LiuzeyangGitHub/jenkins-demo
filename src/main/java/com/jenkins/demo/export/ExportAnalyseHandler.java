@@ -19,6 +19,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 导出解析处理器
@@ -166,6 +169,35 @@ public final class ExportAnalyseHandler {
             }
             cellCount++;
 
+        }
+    }
+
+
+    /**
+     * 填充单元格
+     *
+     * @param obj
+     * @author sunlingao@zbj.com
+     * @date 2017年9月21日
+     * @version
+     */
+    private static void fillCell(HSSFRow row, Object obj,List<Title> titleList) {
+        int cellCount = 0;
+        Field[] fields = obj.getClass().getDeclaredFields();
+        Map<String, Field> fieldMap = Stream.of(fields).collect(Collectors.toMap(Field::getName, Function.identity()));
+        for (Title title : titleList) {
+            HSSFCell cell = row.createCell(cellCount);
+            String fieldName = fieldMap.get(title).getName();
+            String getMethodName = "get" + StringUtils.capitalize(fieldName);
+            try {
+                Method method = obj.getClass().getMethod(getMethodName);
+                String cellValue = String.valueOf(method.invoke(obj));
+                cell.setCellValue("null".equals(cellValue) ? "" : cellValue);
+            } catch (Exception e) {
+                LOG.error("fillCell error method is {} msg is {}", getMethodName, e);
+                cell.setCellValue("");
+            }
+            cellCount++;
         }
     }
 
